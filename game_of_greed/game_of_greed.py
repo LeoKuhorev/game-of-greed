@@ -26,8 +26,7 @@ class GameLogic:
                 raise TypeError('Dice roll value must be integers')
         if len(dice_roll) > 6:
             raise ValueError('The length of tuple must not exceed 6')
-        
-        dice_roll = list(dice_roll)
+
         scoring_table = {
             1: (100, True),
             2: (20, False),
@@ -36,38 +35,37 @@ class GameLogic:
             5: (50, True),
             6: (60, False),
         }
+
         scores = 0
         count = Counter(dice_roll)
+        dice_roll = list(dice_roll)
 
-        if len(count) == 6:
-            scores += 1500
+        def score_multiple(number_of_appearance: int) -> None:
+            """Helper method. Gets amount of scores for the combination and removes scored values from the pool
+
+            Args:
+                number_of_appearance (int): how many times the value appeared in the roll
+            """
+            if appearance == number_of_appearance:
+                nonlocal scores
+                scores += (scoring_table[pips][0] * 10) * \
+                    (number_of_appearance - 2)
+                for _ in range(i):
+                    dice_roll.remove(pips)
+
+        if len(count) == 6 or list(count.values()) == [2, 2, 2]:
+            scores = 1500
         else:
             for pips, appearance in count.items():
-                if appearance == 6:
-                    scores += (scoring_table[pips][0] * 10) * 4
-                    for _ in range(6):
-                        dice_roll.remove(pips)
-                if appearance == 5:
-                    scores += (scoring_table[pips][0] * 10) * 3
-                    for _ in range(5):
-                        dice_roll.remove(pips)
-                if appearance == 4:
-                    scores += (scoring_table[pips][0] * 10) * 2
-                    for _ in range(4):
-                        dice_roll.remove(pips)
-                if appearance == 3:
-                    scores += scoring_table[pips][0] * 10
-                    for _ in range(3):
-                        dice_roll.remove(pips)
+                for i in range(6, 2, -1):
+                    if appearance == i:
+                        score_multiple(i)
 
             for dice in dice_roll:
                 if scoring_table[dice][1]:
                     scores += scoring_table[dice][0]
-        return scores
-    
 
-    
-        
+        return scores
 
     @staticmethod
     def roll_dice(number_of_dice: int) -> tuple:
@@ -90,7 +88,7 @@ class GameLogic:
             raise ValueError('The number of dice must be between 1 and 6')
 
         return tuple(random.randint(1, 6) for _ in range(number_of_dice))
-       
+
 
 class Banker:
     """Class Banker"""
@@ -106,7 +104,7 @@ class Banker:
         if type(points) is not int:
             raise TypeError('Points must be integer')
         self.shelf_points += points
-        return self.shelf_points 
+        return self.shelf_points
 
     def bank(self) -> int:
         """Permanently stores points from the shelf. Resets shelf points to 0
@@ -125,10 +123,5 @@ class Banker:
         self.shelf_points = 0
 
 
-
-
 if __name__ == "__main__":
-    print(GameLogic.calculate_score((1, 2, 3, 4, 5, 6)))
-
-
-
+    print(GameLogic.calculate_score((2, 3, 2, 3, 4, 4,)))
