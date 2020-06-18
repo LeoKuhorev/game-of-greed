@@ -64,3 +64,13 @@ class TestBanker:
     def test_banker_instance(self):
         """Check class instantiation"""
         assert Banker()
+
+    def test_banker_shelf_type_error(self, banker):
+        with pytest.raises(TypeError) as err:
+            assert banker.shelf('Points must be integer')
+        assert str(err.value) == 'Points must be integer'
+    
+    def test_banker_self_pass_1(self, banker):
+        banker.shelf(100)
+        banker.shelf(50)
+        assert banker.shelf_points == 150

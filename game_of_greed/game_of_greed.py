@@ -50,6 +50,7 @@ class GameLogic:
 
 class Banker:
     """Class Banker"""
+    shelf_points = 0
 
     def shelf(self, points: int):
         """Temporarily stores unbanked points
@@ -57,7 +58,10 @@ class Banker:
         Args:
             points (int): Number of points to store
         """
-        pass
+        if type(points) is not int:
+            raise TypeError('Points must be integer')
+        self.shelf_points += points
+        return self.shelf_points 
 
     def bank(self) -> int:
         """Permanently stores points from the shelf. Resets shelf points to 0
@@ -72,9 +76,16 @@ class Banker:
         """
         pass
 
+    
 
 
 
 
 if __name__ == "__main__":
     print(GameLogic.roll_dice(6))
+    banker = Banker()
+    print(banker.shelf_points)
+    banker.shelf(100)
+    print(banker.shelf_points)
+    banker.shelf(50)
+    print(banker.shelf_points)
