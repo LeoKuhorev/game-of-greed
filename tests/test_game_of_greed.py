@@ -85,4 +85,9 @@ class TestBanker:
         assert banker.shelf_points == 0
         assert banker.bank_points == 150
 
-
+    def test_banker_clear_shelf_pass_1(self, banker):
+        assert banker.shelf_points == 0 
+        banker.shelf(200)
+        assert banker.shelf_points == 200 
+        banker.clear_shelf()
+        assert banker.shelf_points == 0

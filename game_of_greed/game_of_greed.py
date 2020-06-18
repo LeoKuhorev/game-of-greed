@@ -78,7 +78,7 @@ class Banker:
     def clear_shelf(self):
         """Removes all unbanked points
         """
-        pass
+        self.shelf_points = 0
 
 
 
@@ -93,4 +93,8 @@ if __name__ == "__main__":
     print(banker.shelf_points)
     print(banker.bank())
     print(banker.shelf_points, banker.bank_points)
+    banker.shelf(200)
+    print(banker.shelf_points)
+    banker.clear_shelf()
+    print(banker.shelf_points)
 
