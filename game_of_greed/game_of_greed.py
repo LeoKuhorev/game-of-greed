@@ -130,6 +130,3 @@ class Banker:
         """Removes all unbanked points
         """
         self.shelf_points = 0
-
-
-print(GameLogic.calculate_score((1, 2, 2, 2, 1, 1,)))
