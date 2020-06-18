@@ -1,4 +1,5 @@
 import pytest
+from collections import Counter
 
 from game_of_greed import __version__
 from game_of_greed.game_of_greed import Banker, GameLogic
@@ -42,6 +43,15 @@ class TestGameLogic:
         with pytest.raises(ValueError) as err:
             assert GameLogic.roll_dice(0)
         assert str(err.value) == "The number of dice must be between 1 and 6"
+
+    def test_gl_roll_dice_pass_1(self):
+        for _ in range(1000000):
+            actual = GameLogic.roll_dice(1)
+            assert 1 <= actual[0] <= 6
+
+    def test_gl_roll_dice_pass_2(self):
+        assert len(GameLogic.roll_dice(6)) == 6
+
 
 
 class TestBanker:

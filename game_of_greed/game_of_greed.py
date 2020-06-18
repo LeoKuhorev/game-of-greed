@@ -1,3 +1,6 @@
+import random
+
+
 class GameLogic:
     """Game Logic class"""
 
@@ -20,6 +23,7 @@ class GameLogic:
         for roll in dice_roll:
             if type(roll) is not tuple:
                 raise TypeError('Dice roll value must be integers')
+        
 
     @staticmethod
     def roll_dice(number_of_dice: int) -> tuple:
@@ -41,6 +45,8 @@ class GameLogic:
         if (number_of_dice <= 0 or number_of_dice > 6):
             raise ValueError('The number of dice must be between 1 and 6')
 
+        return tuple(random.randint(1, 6) for _ in range(number_of_dice))
+       
 
 class Banker:
     """Class Banker"""
@@ -65,3 +71,10 @@ class Banker:
         """Removes all unbanked points
         """
         pass
+
+
+
+
+
+if __name__ == "__main__":
+    print(GameLogic.roll_dice(6))
