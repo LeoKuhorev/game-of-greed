@@ -17,53 +17,60 @@ class GameLogic:
 
         Raises:
             Exception: Not a tuple passed in
+            Exception: Length of the tuple is greater than 6
             Exception: Tuple value is not integer
         """
+        # Exception handling
         if type(dice_roll) is not tuple:
             raise TypeError('Dice roll must be a tuple')
-        for roll in dice_roll:
-            if type(roll) is not int:
-                raise TypeError('Dice roll value must be integers')
+
         if len(dice_roll) > 6:
             raise ValueError('The length of tuple must not exceed 6')
 
-        scoring_table = {
-            1: (100, True),
-            2: (20, False),
-            3: (30, False),
-            4: (40, False),
-            5: (50, True),
-            6: (60, False),
+        for roll in dice_roll:
+            if type(roll) is not int:
+                raise TypeError('Dice roll value must be integers')
+
+        # Scores for single and multiple appearance
+        SCORES = {
+            1: {'one': 100, 'mult': 1000},
+            2: {'one': 0, 'mult': 200},
+            3: {'one': 0, 'mult': 300},
+            4: {'one': 0, 'mult': 400},
+            5: {'one': 50, 'mult': 500},
+            6: {'one': 0, 'mult': 600},
         }
 
-        scores = 0
+        scores = 0  # Final scores
         count = Counter(dice_roll)
-        dice_roll = list(dice_roll)
+        dice_roll = list(dice_roll)  # Convert passed in tuple into a list
 
-        def score_multiple(number_of_appearance: int) -> None:
+        def score_multiple(times_appeared: int) -> None:
             """Helper method. Gets amount of scores for the combination and removes scored values from the pool
 
             Args:
-                number_of_appearance (int): how many times the value appeared in the roll
+                times_appeared (int): how many times the value appeared in the roll
             """
-            if appearance == number_of_appearance:
+            if appearance == times_appeared:
                 nonlocal scores
-                scores += (scoring_table[pips][0] * 10) * \
-                    (number_of_appearance - 2)
+                scores += (SCORES[pips]['mult']) * (times_appeared - 2)
                 for _ in range(i):
                     dice_roll.remove(pips)
 
+        # If straight or 3 pairs - give 1500 points
         if len(count) == 6 or list(count.values()) == [2, 2, 2]:
             scores = 1500
+
         else:
+            # Process 3..6 times appearance
             for pips, appearance in count.items():
                 for i in range(6, 2, -1):
                     if appearance == i:
                         score_multiple(i)
 
+            # Process single appearance
             for dice in dice_roll:
-                if scoring_table[dice][1]:
-                    scores += scoring_table[dice][0]
+                scores += SCORES[dice]['one']
 
         return scores
 
@@ -121,7 +128,3 @@ class Banker:
         """Removes all unbanked points
         """
         self.shelf_points = 0
-
-
-if __name__ == "__main__":
-    print(GameLogic.calculate_score((2, 3, 2, 3, 4, 4,)))
