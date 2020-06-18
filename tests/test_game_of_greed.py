@@ -45,11 +45,27 @@ class TestGameLogic:
         assert str(err.value) == "The number of dice must be between 1 and 6"
 
     def test_gl_roll_dice_pass_1(self):
-        for _ in range(1000000):
-            actual = GameLogic.roll_dice(1)
-            assert 1 <= actual[0] <= 6
+        """Test if the method returns a tuple"""
+        assert type(GameLogic.roll_dice(2)) is tuple
 
     def test_gl_roll_dice_pass_2(self):
+        """Test if the method returns all values in specified range (1 - 6)
+        """
+        results = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0}
+        for _ in range(10000):
+            roll = Counter(GameLogic.roll_dice((6)))
+            for pips, times in roll.items():
+                results[pips] += times
+        for times in results.values():
+            assert times > 0
+
+    def test_gl_roll_dice_pass_3(self):
+        """Test if the method returns tuple of the correct length"""
+        assert len(GameLogic.roll_dice(1)) == 1
+        assert len(GameLogic.roll_dice(2)) == 2
+        assert len(GameLogic.roll_dice(3)) == 3
+        assert len(GameLogic.roll_dice(4)) == 4
+        assert len(GameLogic.roll_dice(5)) == 5
         assert len(GameLogic.roll_dice(6)) == 6
 
 
