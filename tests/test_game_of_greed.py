@@ -1,4 +1,5 @@
 import pytest
+from collections import Counter
 
 from game_of_greed import __version__
 from game_of_greed.game_of_greed import Banker, GameLogic
@@ -43,6 +44,15 @@ class TestGameLogic:
             assert GameLogic.roll_dice(0)
         assert str(err.value) == "The number of dice must be between 1 and 6"
 
+    def test_gl_roll_dice_pass_1(self):
+        for _ in range(1000000):
+            actual = GameLogic.roll_dice(1)
+            assert 1 <= actual[0] <= 6
+
+    def test_gl_roll_dice_pass_2(self):
+        assert len(GameLogic.roll_dice(6)) == 6
+
+
 
 class TestBanker:
     """Tests for the Banker class and its methods
@@ -54,3 +64,30 @@ class TestBanker:
     def test_banker_instance(self):
         """Check class instantiation"""
         assert Banker()
+
+    def test_banker_shelf_type_error(self, banker):
+        with pytest.raises(TypeError) as err:
+            assert banker.shelf('Points must be integer')
+        assert str(err.value) == 'Points must be integer'
+    
+    def test_banker_self_pass_1(self, banker):
+        banker.shelf(100)
+        banker.shelf(50)
+        assert banker.shelf_points == 150
+
+    def test_banker_bank_pass_1(self, banker):
+        assert banker.shelf_points == 0
+        assert banker.bank_points == 0
+        banker.shelf(150)
+        assert banker.shelf_points == 150
+        assert banker.bank_points == 0
+        assert banker.bank() == 150
+        assert banker.shelf_points == 0
+        assert banker.bank_points == 150
+
+    def test_banker_clear_shelf_pass_1(self, banker):
+        assert banker.shelf_points == 0 
+        banker.shelf(200)
+        assert banker.shelf_points == 200 
+        banker.clear_shelf()
+        assert banker.shelf_points == 0
