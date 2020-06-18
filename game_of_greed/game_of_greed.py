@@ -1,4 +1,5 @@
 import random
+from collections import Counter
 
 
 class GameLogic:
@@ -21,8 +22,51 @@ class GameLogic:
         if type(dice_roll) is not tuple:
             raise TypeError('Dice roll must be a tuple')
         for roll in dice_roll:
-            if type(roll) is not tuple:
+            if type(roll) is not int:
                 raise TypeError('Dice roll value must be integers')
+        if len(dice_roll) > 6:
+            raise ValueError('The length of tuple must not exceed 6')
+        
+        dice_roll = list(dice_roll)
+        scoring_table = {
+            1: (100, True),
+            2: (20, False),
+            3: (30, False),
+            4: (40, False),
+            5: (50, True),
+            6: (60, False),
+        }
+        scores = 0
+        count = Counter(dice_roll)
+
+        if len(count) == 6:
+            scores += 1500
+        else:
+            for pips, appearance in count.items():
+                if appearance == 6:
+                    scores += (scoring_table[pips][0] * 10) * 4
+                    for _ in range(6):
+                        dice_roll.remove(pips)
+                if appearance == 5:
+                    scores += (scoring_table[pips][0] * 10) * 3
+                    for _ in range(5):
+                        dice_roll.remove(pips)
+                if appearance == 4:
+                    scores += (scoring_table[pips][0] * 10) * 2
+                    for _ in range(4):
+                        dice_roll.remove(pips)
+                if appearance == 3:
+                    scores += scoring_table[pips][0] * 10
+                    for _ in range(3):
+                        dice_roll.remove(pips)
+
+            for dice in dice_roll:
+                if scoring_table[dice][1]:
+                    scores += scoring_table[dice][0]
+        return scores
+    
+
+    
         
 
     @staticmethod
@@ -84,17 +128,7 @@ class Banker:
 
 
 if __name__ == "__main__":
-    print(GameLogic.roll_dice(6))
-    banker = Banker()
-    print(banker.shelf_points)
-    banker.shelf(100)
-    print(banker.shelf_points)
-    banker.shelf(50)
-    print(banker.shelf_points)
-    print(banker.bank())
-    print(banker.shelf_points, banker.bank_points)
-    banker.shelf(200)
-    print(banker.shelf_points)
-    banker.clear_shelf()
-    print(banker.shelf_points)
+    print(GameLogic.calculate_score((1, 2, 3, 4, 5, 6)))
+
+
 
