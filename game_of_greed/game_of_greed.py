@@ -51,6 +51,7 @@ class GameLogic:
 class Banker:
     """Class Banker"""
     shelf_points = 0
+    bank_points = 0
 
     def shelf(self, points: int):
         """Temporarily stores unbanked points
@@ -69,14 +70,15 @@ class Banker:
         Returns:
             int: The amount of points added to total from shelf
         """
-        pass
+        added_points = self.shelf_points
+        self.bank_points += self.shelf_points
+        self.shelf_points = 0
+        return added_points
 
     def clear_shelf(self):
         """Removes all unbanked points
         """
         pass
-
-    
 
 
 
@@ -89,3 +91,6 @@ if __name__ == "__main__":
     print(banker.shelf_points)
     banker.shelf(50)
     print(banker.shelf_points)
+    print(banker.bank())
+    print(banker.shelf_points, banker.bank_points)
+
