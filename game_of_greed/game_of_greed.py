@@ -51,11 +51,13 @@ class GameLogic:
             Args:
                 times_appeared (int): how many times the value appeared in the roll
             """
-            if appearance == times_appeared:
-                nonlocal scores
-                scores += (SCORES[pips]['mult']) * (times_appeared - 2)
-                for _ in range(i):
-                    dice_roll.remove(pips)
+            # Calculate score
+            nonlocal scores
+            scores += (SCORES[pips]['mult']) * (times_appeared - 2)
+
+            # Remove scored dice from the roll
+            for _ in range(i):
+                dice_roll.remove(pips)
 
         # If straight or 3 pairs - give 1500 points
         if len(count) == 6 or list(count.values()) == [2, 2, 2]:
@@ -128,3 +130,6 @@ class Banker:
         """Removes all unbanked points
         """
         self.shelf_points = 0
+
+
+print(GameLogic.calculate_score((1, 2, 2, 2, 1, 1,)))
