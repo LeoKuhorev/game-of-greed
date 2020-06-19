@@ -2,16 +2,13 @@
 
 ## Lab: 06
 
-Lab01-Exception-Handling
-
 _Authors: Leo Kukharau, Natalie Sinner, Richard Whitehead_
 
 ---
 
 ## Description
 
-**_[Tell me about your application, should be about a paragraph]_**
-This is a Python console application that will simulate a dice game.... to be continued...
+This is a Python console application that will simulate a dice game called Game of Greed.
 
 ---
 
@@ -29,9 +26,9 @@ Select `File` -> `Open` -> `Project/Solution`
 
 Next navigate to the location you cloned the Repository.
 
-Double click on the `Lab01-About-Me` directory.
+Double click on the `game_of_greed` directory.
 
-Then select and open `AboutMe.py`
+Then select and open `game_of_greed.py`
 
 ---
 
@@ -55,4 +52,5 @@ Then select and open `AboutMe.py`
 
 ### Change Log
 
-1.0: _Initial setup_ - 16 Jun 2020
+1.0: _Initial setup_ - 16 Jun 2020  
+1.1: _Initialized test GameLogic and Banker classes_ - 18 Jun 2020
