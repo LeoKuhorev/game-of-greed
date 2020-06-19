@@ -31,91 +31,85 @@ class TestGameLogic:
         with pytest.raises(TypeError) as err:
             assert GameLogic.calculate_score((1, 2, 'banana'))
         assert str(err.value) == "Dice roll value must be integers"
-    
-    def test_gl_calculate_score_zilch(self):
-        """Test if the methods calculates non-scoring roll"""
-        assert GameLogic.calculate_score((2, 3, 4, 6)) == 0   
-        
-    def test_gl_calculate_score_ones(self):
-        """Test if the methods calculates the score ones. This covers left-overs ones
+
+    @pytest.mark.parametrize('roll, result', [
+        # zilch
+        ((2, 3, 4, 6), 0),
+        ((4, 4, 2, 3), 0),
+        ((6, 3, 2, 4), 0),
+
+        # ones & leftover_ones
+        ((1,), 100),
+        ((1, 1), 200),
+        ((1, 1, 1), 1000),
+        ((1, 1, 1, 1), 2000),
+        ((1, 1, 1, 1, 1), 3000),
+        ((1, 1, 1, 1, 1, 1), 4000),
+
+        # twos
+        ((2,), 0),
+        ((2, 2), 0),
+        ((2, 2, 2), 200),
+        ((2, 2, 2, 2), 400),
+        ((2, 2, 2, 2, 2), 600),
+        ((2, 2, 2, 2, 2, 2), 800),
+
+        # threes
+        ((3,), 0),
+        ((3, 3), 0),
+        ((3, 3, 3), 300),
+        ((3, 3, 3, 3), 600),
+        ((3, 3, 3, 3, 3), 900),
+        ((3, 3, 3, 3, 3, 3), 1200),
+
+        # fours
+        ((4,), 0),
+        ((4, 4), 0),
+        ((4, 4, 4), 400),
+        ((4, 4, 4, 4), 800),
+        ((4, 4, 4, 4, 4), 1200),
+        ((4, 4, 4, 4, 4, 4), 1600),
+
+        # fives & leftover_fives
+        ((5,), 50),
+        ((5, 5), 100),
+        ((5, 5, 5), 500),
+        ((5, 5, 5, 5), 1000),
+        ((5, 5, 5, 5, 5), 1500),
+        ((5, 5, 5, 5, 5, 5), 2000),
+
+        # sixes
+        ((6,), 0),
+        ((6, 6), 0),
+        ((6, 6, 6), 600),
+        ((6, 6, 6, 6), 1200),
+        ((6, 6, 6, 6, 6), 1800),
+        ((6, 6, 6, 6, 6, 6), 2400),
+
+        # straight
+        ((1, 2, 3, 4, 5, 6), 1500),
+        ((5, 1, 4, 2, 6, 3), 1500),
+        ((6, 5, 4, 3, 2, 1), 1500),
+
+        # three pairs
+        ((1, 2, 3, 3, 2, 1), 1500),
+        ((5, 5, 4, 2, 4, 2), 1500),
+        ((2, 2, 4, 4, 3, 3), 1500),
+
+        # two_trios
+        ((1, 1, 1, 2, 2, 2), 1200),
+        ((3, 3, 3, 4, 4, 4), 700),
+        ((5, 5, 5, 6, 6, 6), 1100),
+
+    ])
+    def test_gl_calculate_score(self, roll, result):
+        """Test if the method calculates correct number of scores
+        Args:
+            roll (tuple): roll combination
+            result (int): points result
         """
-        assert GameLogic.calculate_score((1,)) == 100
-        assert GameLogic.calculate_score((1, 1)) == 200
-        assert GameLogic.calculate_score((1, 1, 1)) == 1000
-        assert GameLogic.calculate_score((1, 1, 1, 1)) == 2000
-        assert GameLogic.calculate_score((1, 1, 1, 1, 1)) == 3000
-        assert GameLogic.calculate_score((1, 1, 1, 1, 1, 1)) == 4000
-        
-    def test_gl_calculate_score_twos(self):
-        """Test if the methods calculates the score for twos
-        """
-        assert GameLogic.calculate_score((2,)) == 0
-        assert GameLogic.calculate_score((2, 2)) == 0
-        assert GameLogic.calculate_score((2, 2, 2)) == 200
-        assert GameLogic.calculate_score((2, 2, 2, 2)) == 400
-        assert GameLogic.calculate_score((2, 2, 2, 2, 2)) == 600
-        assert GameLogic.calculate_score((2, 2, 2, 2, 2, 2)) == 800
-        
-    def test_gl_calculate_score_threes(self):
-        """Test if the methods calculates the score for threes
-        """
-        assert GameLogic.calculate_score((3,)) == 0
-        assert GameLogic.calculate_score((3, 3)) == 0
-        assert GameLogic.calculate_score((3, 3, 3)) == 300
-        assert GameLogic.calculate_score((3, 3, 3, 3)) == 600
-        assert GameLogic.calculate_score((3, 3, 3, 3, 3)) == 900
-        assert GameLogic.calculate_score((3, 3, 3, 3, 3, 3)) == 1200
-        
-    def test_gl_calculate_score_fours(self):
-        """Test if the methods calculates the score for fours
-        """
-        assert GameLogic.calculate_score((4,)) == 0
-        assert GameLogic.calculate_score((4, 4)) == 0
-        assert GameLogic.calculate_score((4, 4, 4)) == 400
-        assert GameLogic.calculate_score((4, 4, 4, 4)) == 800
-        assert GameLogic.calculate_score((4, 4, 4, 4, 4)) == 1200
-        assert GameLogic.calculate_score((4, 4, 4, 4, 4, 4)) == 1600
-        
-    def test_gl_calculate_score_fives(self):
-        """Test if the methods calculates the score for five, this covers left-over fives
-        """
-        assert GameLogic.calculate_score((5,)) == 50
-        assert GameLogic.calculate_score((5, 5)) == 100
-        assert GameLogic.calculate_score((5, 5, 5)) == 500
-        assert GameLogic.calculate_score((5, 5, 5, 5)) == 1000
-        assert GameLogic.calculate_score((5, 5, 5, 5, 5)) == 1500
-        assert GameLogic.calculate_score((5, 5, 5, 5, 5, 5)) == 2000
-        
-    def test_gl_calculate_score_six(self):
-        """Test if the methods calculates the score for six
-        """
-        assert GameLogic.calculate_score((6,)) == 0
-        assert GameLogic.calculate_score((6, 6)) == 0
-        assert GameLogic.calculate_score((6, 6, 6)) == 600
-        assert GameLogic.calculate_score((6, 6, 6, 6)) == 1200
-        assert GameLogic.calculate_score((6, 6, 6, 6, 6)) == 1800
-        assert GameLogic.calculate_score((6, 6, 6, 6, 6, 6)) == 2400
-        
-    def test_gl_calculate_score_straight(self):
-        """Test if the methods calculates the score for straight
-        """
-        assert GameLogic.calculate_score((6, 5, 4, 3, 2, 1)) == 1500
-    
-    def test_gl_calculate_score_three_pairs(self):
-        """Test if the methods calculates the score for three pairs
-        """
-        assert GameLogic.calculate_score((1, 1, 2, 2, 4, 4 )) == 1500
-        assert GameLogic.calculate_score((6, 6, 2, 2, 5, 5 )) == 1500
-        assert GameLogic.calculate_score((3, 3, 2, 2, 6, 6 )) == 1500
-        
-    def test_gl_calculate_score_two_trios(self):
-        """Test if the methods calculates the score for two trios
-        """
-        assert GameLogic.calculate_score((1, 1, 1, 2, 2, 2)) == 1200
-        assert GameLogic.calculate_score((3, 3, 3, 4, 4, 4)) == 700
-        assert GameLogic.calculate_score((5, 5, 5, 6, 6, 6)) == 1100
-        
-        
+        assert GameLogic.calculate_score(roll) == result
+
     def test_gl_roll_dice_type_error(self):
         """Test if the method raises TypeError if not an integer passed in"""
         with pytest.raises(TypeError) as err:
@@ -143,14 +137,10 @@ class TestGameLogic:
         for times in results.values():
             assert times > 0
 
-    def test_gl_roll_dice_pass_3(self):
+    @pytest.mark.parametrize('dice', [1, 2, 3, 4, 5, 6])
+    def test_gl_roll_dice_pass_3(self, dice):
         """Test if the method returns tuple of the correct length"""
-        assert len(GameLogic.roll_dice(1)) == 1
-        assert len(GameLogic.roll_dice(2)) == 2
-        assert len(GameLogic.roll_dice(3)) == 3
-        assert len(GameLogic.roll_dice(4)) == 4
-        assert len(GameLogic.roll_dice(5)) == 5
-        assert len(GameLogic.roll_dice(6)) == 6
+        assert len(GameLogic.roll_dice(dice)) == dice
 
 
 class TestBanker:
