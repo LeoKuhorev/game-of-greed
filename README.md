@@ -54,3 +54,6 @@ Then select and open `game_of_greed.py`
 
 1.0: _Initial setup_ - 16 Jun 2020  
 1.1: _Initialized test GameLogic and Banker classes_ - 18 Jun 2020
+
+
+[link to PR:](https://github.com/LeoKuhorev/game-of-greed/pull/6)
