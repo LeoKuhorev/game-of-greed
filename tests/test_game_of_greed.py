@@ -2,7 +2,8 @@ import pytest
 from collections import Counter
 
 from game_of_greed import __version__
-from game_of_greed.game_of_greed import Banker, GameLogic
+from game_of_greed.banker import Banker
+from game_of_greed.game_logic import GameLogic
 
 
 def test_proof_of_life():
