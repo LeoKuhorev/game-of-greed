@@ -101,8 +101,16 @@ class GameLogic:
 
 class Banker:
     """Class Banker"""
-    shelf_points = 0
-    bank_points = 0
+
+    def __init__(self):
+        self.shelf_points = 0
+        self.bank_points = 0
+
+    def __repr__(self):
+        return 'Banker()'
+
+    def __str__(self):
+        return f'shelf poins: {self.shelf_points}, bank points: {self.bank_points}'
 
     def shelf(self, points: int):
         """Temporarily stores unbanked points
