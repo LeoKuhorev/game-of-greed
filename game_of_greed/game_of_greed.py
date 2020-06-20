@@ -7,39 +7,55 @@ from collections import Counter
 class GameOfGreed:
 
     def __init__(self):
-        self.NUMBER_OF_ROUNDS = 3
+        self.NUMBER_OF_ROUNDS = 10
         self.bank = Banker()
         self.welcome_message = 'Welcome to Game of Greed'
         self.wanna_play_message = 'Wanna play? y/n '
         self.incorrect_dice_message = 'Cheater!!! Or possibly made a typo...'
         self.select_dice_message = 'Enter dice to keep (no spaces), or (q)uit: '
 
-    def welcome_user(self):
+    def validate_answer(self, answer):
+        if answer.lower() == 'yes' or answer.lower() == 'y':
+            answer = 'y'
+        elif answer.lower() == 'no' or answer.lower() == 'n':
+            answer = 'n'
+        elif answer.lower() == 'roll' or answer.lower() == 'r':
+            answer = 'r'
+        elif answer.lower() == 'quit' or answer.lower() == 'q':
+            answer = 'q'
+        elif answer.lower() == 'bank' or answer.lower() == 'b':
+            answer = 'b'
+
+        return answer
+
+    def start_game(self):
+
         print(self.welcome_message)
-        answer = input(self.wanna_play_message)
+        answer = self.validate_answer(input(self.wanna_play_message))
 
         while answer != 'y' or answer != 'n':
             if answer == 'y':
-                return self.start_game()
+                return self.start_rounds()
             elif answer == 'n':
                 return print('OK. Maybe another time')
-            answer = input(f'incorrect answer, {self.wanna_play_message}')
+            answer = self.validate_answer(
+                input(f'Sorry, {answer} is not a valid option. {self.wanna_play_message}'))
 
-    def start_game(self):
+    def start_rounds(self):
         rounds = 1
         dice = 6
 
         while rounds <= self.NUMBER_OF_ROUNDS:
-            print(f'Starting round {rounds}')
+            print(f'Starting round {rounds}/{self.NUMBER_OF_ROUNDS}')
             print(f'Rolling {dice} dice...')
             result = GameLogic.roll_dice(dice)
             print(result)
 
-            shelf_points = 0
-            while shelf_points == 0:
-                answer = input(self.select_dice_message)
+            score = 0
+            while score == 0:
+                answer = self.validate_answer(input(self.select_dice_message))
                 if answer == 'q':
-                    break
+                    return self.quit()
                 selected_dice = self.select_dice(answer, result)
                 score = GameLogic.calculate_score(selected_dice)
                 shelf_points = self.bank.shelf(score)
@@ -48,7 +64,8 @@ class GameOfGreed:
             print(
                 f'You have {shelf_points} unbanked points and {dice} dice remaining')
 
-            answer = input('(r)oll again, (b)ank your points or (q)uit q ')
+            answer = self.validate_answer(
+                input('(r)oll again, (b)ank your points or (q)uit q '))
             if answer == 'q':
                 break
             elif answer == 'r':
@@ -71,8 +88,8 @@ class GameOfGreed:
             if result.count(dice) > output.count(dice):
                 output.append(dice)
             else:
-                answer = input(
-                    f'{self.incorrect_dice_message} {self.select_dice_message}')
+                answer = self.validate_answer(input(
+                    f'{self.incorrect_dice_message} {self.select_dice_message}'))
 
         return tuple(output)
 
@@ -82,4 +99,4 @@ class GameOfGreed:
 
 if __name__ == "__main__":
     new_game = GameOfGreed()
-    new_game.welcome_user()
+    new_game.start_game()
