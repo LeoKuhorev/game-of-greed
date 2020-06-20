@@ -16,11 +16,19 @@ class Banker:
 
         Args:
             points (int): Number of points to store
+
+        Returns:
+            int: Current shelf points amount
         """
         if type(points) is not int:
             raise TypeError('Points must be integer')
         self.shelf_points += points
         return self.shelf_points
+
+    def clear_shelf(self):
+        """Removes all unbanked points
+        """
+        self.shelf_points = 0
 
     def bank(self) -> int:
         """Permanently stores points from the shelf. Resets shelf points to 0
@@ -30,10 +38,5 @@ class Banker:
         """
         added_points = self.shelf_points
         self.bank_points += self.shelf_points
-        self.shelf_points = 0
+        self.clear_shelf()
         return added_points
-
-    def clear_shelf(self):
-        """Removes all unbanked points
-        """
-        self.shelf_points = 0

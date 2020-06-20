@@ -45,20 +45,6 @@ class GameLogic:
         count = Counter(dice_roll)
         dice_roll = list(dice_roll)  # Convert passed in tuple into a list
 
-        def score_multiple(times_appeared: int) -> None:
-            """Helper method. Gets amount of scores for the combination and removes scored values from the pool
-
-            Args:
-                times_appeared (int): how many times the value appeared in the roll
-            """
-            # Calculate score
-            nonlocal scores
-            scores += (SCORES[pips]['mult']) * (times_appeared - 2)
-
-            # Remove scored dice from the roll
-            for _ in range(i):
-                dice_roll.remove(pips)
-
         # If straight or 3 pairs - give 1500 points
         if len(count) == 6 or list(count.values()) == [2, 2, 2]:
             scores = 1500
@@ -68,7 +54,11 @@ class GameLogic:
             for pips, appearance in count.items():
                 for i in range(6, 2, -1):
                     if appearance == i:
-                        score_multiple(i)
+                        scores += (SCORES[pips]['mult']) * (i - 2)
+
+                        # Remove scored dice from the roll
+                        for _ in range(i):
+                            dice_roll.remove(pips)
 
             # Process single appearance
             for dice in dice_roll:
