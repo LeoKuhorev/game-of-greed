@@ -26,27 +26,27 @@ Select `File` -> `Open` -> `Project/Solution`
 
 Next navigate to the location you cloned the Repository.
 
-Double click on the `game_of_greed` directory.
+Navigate to the `game_of_greed` directory.
 
-Then select and open `game_of_greed.py`
+Run `python -m game_of_greed.game` or `PYTHONPATH='.' python game_of_greed/game.py`
 
 ---
 
-### Visuals
+# Architecture
 
-**_[Add screenshots of your application in action]_**
+- Python 3.8.3
+- Poetry
+- Pytest
+
+### Visuals
 
 #### Application Start
 
-![Game of Greed lab 2](assests/playing_game.png)
+![Game of Greed lab 2](assests/start.png)
 
 #### Using the Application
 
-![Image 1](https://via.placeholder.com/750x500)
-
-#### Application End
-
-![Image 1](https://via.placeholder.com/750x500)
+![Image 1](assests/playing_game.png)
 
 ---
 
@@ -55,6 +55,5 @@ Then select and open `game_of_greed.py`
 1.0: _Initial setup_ - 16 Jun 2020  
 1.1: _Initialized test GameLogic and Banker classes_ - 18 Jun 2020  
 1.2: _Initialized user prompts and simulate dice rolling_ - 20 Jun 2020
-
 
 [link to PR:](https://github.com/LeoKuhorev/game-of-greed/pull/6)
