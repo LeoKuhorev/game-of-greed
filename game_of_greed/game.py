@@ -1,5 +1,5 @@
-from banker import Banker
-from game_logic import GameLogic
+from game_of_greed.banker import Banker
+from game_of_greed.game_logic import GameLogic
 
 from collections import Counter
 import sys
@@ -8,11 +8,11 @@ import sys
 class GameOfGreed:
     """Game of Greed class"""
 
-    def __init__(self):
+    def __init__(self, roll_dice=None):
         self.NUMBER_OF_ROUNDS = 10
         self.bank = Banker()
         self.welcome_msg = 'Welcome to Game of Greed'
-        self.wanna_play_msg = 'Wanna play? y/n '
+        self.wanna_play_msg = 'Wanna play? '
         self.invalid_selection_msg = 'Cheater!!! Or possibly made a typo...'
         self.select_dice_msg = 'Enter dice to keep (no spaces), or (q)uit: '
 
@@ -39,13 +39,14 @@ class GameOfGreed:
             print(f'Starting round {rounds}/{self.NUMBER_OF_ROUNDS}')
             print(f'Rolling {dice} dice...')
             current_roll = GameLogic.roll_dice(dice)
-            print(current_roll)
+            print(','.join(str(i) for i in current_roll))
 
             # If current roll is worth 0 - go to the next round
             if GameLogic.calculate_score(current_roll) == 0:
                 print(
                     'Your current roll is worth 0 points. You\'ve lost all your unbanked points in this round')
                 dice = 6
+                rounds += 1
                 continue
 
             current_score = 0
@@ -55,8 +56,9 @@ class GameOfGreed:
                 # Validate user selection
                 valid_selection = self.validate_selection(answer, current_roll)
                 while not valid_selection:
-                    answer = self.validate_answer(
-                        input(f'{self.invalid_selection_msg} {self.select_dice_msg}'))
+                    print(f'{self.invalid_selection_msg}')
+                    print(','.join(str(i) for i in current_roll))
+                    answer = self.validate_answer(input(self.select_dice_msg))
                     valid_selection = self.validate_selection(
                         answer, current_roll)
 
@@ -78,7 +80,7 @@ class GameOfGreed:
                 f'You have {self.bank.shelf_points} unbanked points and {dice} dice remaining')
 
             answer = self.validate_answer(
-                input('(r)oll again, (b)ank your points or (q)uit q '))
+                input('(r)oll again, (b)ank your points or (q)uit '))
             if answer == 'r':
                 if dice == 0:
                     dice = 6
@@ -87,6 +89,7 @@ class GameOfGreed:
                 dice = 6
                 points = self.bank.bank()
                 print(f'You banked {points} points in round {rounds}')
+                print(f'Total score is {self.bank.bank_points} points')
 
             rounds += 1
 
@@ -145,6 +148,7 @@ class GameOfGreed:
     def quit(self):
         """Shows final message and exits the program
         """
+        print(f'Total score is {self.bank.bank_points} points')
         print(f'Thanks for playing. You earned {self.bank.bank_points} points')
         sys.exit()
 

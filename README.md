@@ -26,9 +26,9 @@ Select `File` -> `Open` -> `Project/Solution`
 
 Next navigate to the location you cloned the Repository.
 
-Double click on the `game_of_greed` directory.
+Navigate to the `game_of_greed` directory.
 
-Then select and open `game_of_greed.py`
+Run `python -m game_of_greed.game` or `PYTHONPATH='.' python game_of_greed/game.py`
 
 ---
 
@@ -55,6 +55,5 @@ Then select and open `game_of_greed.py`
 1.0: _Initial setup_ - 16 Jun 2020  
 1.1: _Initialized test GameLogic and Banker classes_ - 18 Jun 2020  
 1.2: _Initialized user prompts and simulate dice rolling_ - 20 Jun 2020
-
 
 [link to PR:](https://github.com/LeoKuhorev/game-of-greed/pull/6)

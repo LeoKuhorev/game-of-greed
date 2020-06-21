@@ -1,5 +1,5 @@
 import builtins
-from game_of_greed.game_of_greed import GameOfGreed as Game
+from game_of_greed.game import GameOfGreed as Game
 
 
 class Flo:
@@ -47,7 +47,10 @@ class Flo:
 
         game = Game(flo._mock_roller)
 
-        game.play()
+        try:
+            game.start_game()
+        except SystemExit:
+            pass
 
         flo._exit()
 
@@ -91,4 +94,4 @@ class Flo:
 
 
 if __name__ == "__main__":
-    Flo.start("tests/flow/bank_one_roll_then_quit.txt")
+    Flo.start("tests/flo/bank_one_roll_then_quit.txt")
