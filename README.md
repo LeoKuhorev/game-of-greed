@@ -32,21 +32,21 @@ Run `python -m game_of_greed.game` or `PYTHONPATH='.' python game_of_greed/game.
 
 ---
 
-### Visuals
+# Architecture
 
-**_[Add screenshots of your application in action]_**
+- Python 3.8.3
+- Poetry
+- Pytest
+
+### Visuals
 
 #### Application Start
 
-![Game of Greed lab 2](assests/playing_game.png)
+![Game of Greed lab 2](assests/start.png)
 
 #### Using the Application
 
-![Image 1](https://via.placeholder.com/750x500)
-
-#### Application End
-
-![Image 1](https://via.placeholder.com/750x500)
+![Image 1](assests/playing_game.png)
 
 ---
 
