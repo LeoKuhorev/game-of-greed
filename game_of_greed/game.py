@@ -11,54 +11,56 @@ class GameOfGreed:
     def __init__(self, roll_dice=None):
         self.NUMBER_OF_ROUNDS = 10
         self.bank = Banker()
+
+        # Game messages
         self.welcome_msg = 'Welcome to Game of Greed'
         self.wanna_play_msg = 'Wanna play? '
         self.invalid_selection_msg = 'Cheater!!! Or possibly made a typo...'
         self.select_dice_msg = 'Enter dice to keep (no spaces), or (q)uit: '
+        self.zero_point_roll_msg = 'Your current roll is worth 0 points. You\'ve lost all your unbanked points in this round'
+        self.options_msg = '(r)oll again, (b)ank your points or (q)uit '
 
     def start_game(self) -> None:
-        """Prints welcome message and asks user if they want to start the game
+        """Print welcome message and ask user if they want to start the game
         """
         print(self.welcome_msg)
-        answer = self.validate_answer(input(self.wanna_play_msg))
-
-        while answer != 'y' or answer != 'n':
-            if answer == 'y':
-                return self.game()
-            elif answer == 'n':
-                return print('OK. Maybe another time')
-            answer = self.validate_answer(
-                input(f'Sorry, {answer} is not a valid option. {self.wanna_play_msg}'))
+        answer = self.validate_answer(
+            input(self.wanna_play_msg), ('y', 'n', 'q'))
+        if answer == 'y':
+            return self.game()
+        elif answer == 'n':
+            return print('OK. Maybe another time')
 
     def game(self) -> None:
-        """Handles game workflow"""
-        rounds = 1
-        dice = 6
+        """Handle game workflow"""
+        current_round = 1
+        dice_to_roll = 6
 
-        while rounds <= self.NUMBER_OF_ROUNDS:
-            print(f'Starting round {rounds}/{self.NUMBER_OF_ROUNDS}')
-            print(f'Rolling {dice} dice...')
-            current_roll = GameLogic.roll_dice(dice)
+        while current_round <= self.NUMBER_OF_ROUNDS:
+            print(f'Starting round {current_round}/{self.NUMBER_OF_ROUNDS}')
+            print(f'Rolling {dice_to_roll} dice...')
+            current_roll = GameLogic.roll_dice(dice_to_roll)
             print(','.join(str(i) for i in current_roll))
 
             # If current roll is worth 0 - go to the next round
             if GameLogic.calculate_score(current_roll) == 0:
-                print(
-                    'Your current roll is worth 0 points. You\'ve lost all your unbanked points in this round')
-                dice = 6
-                rounds += 1
+                print(self.zero_point_roll_msg)
+                dice_to_roll = 6
+                current_round += 1
                 continue
 
             current_score = 0
             while current_score == 0:
-                answer = self.validate_answer(input(self.select_dice_msg))
+                answer = self.validate_answer(
+                    input(self.select_dice_msg), ('1', '2', '3', '4', '5', '6', 'q'))
 
                 # Validate user selection
                 valid_selection = self.validate_selection(answer, current_roll)
                 while not valid_selection:
                     print(f'{self.invalid_selection_msg}')
                     print(','.join(str(i) for i in current_roll))
-                    answer = self.validate_answer(input(self.select_dice_msg))
+                    answer = self.validate_answer(
+                        input(self.select_dice_msg), ('1', '2', '3', '4', '5', '6', 'q'))
                     valid_selection = self.validate_selection(
                         answer, current_roll)
 
@@ -75,23 +77,23 @@ class GameOfGreed:
                     print(
                         f'Selection of {selection} gives you 0 points, please try again')
 
-            dice -= len(answer)
+            dice_to_roll -= len(answer)
             print(
-                f'You have {self.bank.shelf_points} unbanked points and {dice} dice remaining')
+                f'You have {self.bank.shelf_points} unbanked points and {dice_to_roll} dice remaining')
 
             answer = self.validate_answer(
-                input('(r)oll again, (b)ank your points or (q)uit '))
+                input(self.options_msg), ('r', 'b', 'q'))
             if answer == 'r':
-                if dice == 0:
-                    dice = 6
+                if dice_to_roll == 0:
+                    dice_to_roll = 6
                 continue
             elif answer == 'b':
-                dice = 6
+                dice_to_roll = 6
                 points = self.bank.bank()
-                print(f'You banked {points} points in round {rounds}')
+                print(f'You banked {points} points in round {current_round}')
                 print(f'Total score is {self.bank.bank_points} points')
 
-            rounds += 1
+            current_round += 1
 
         self.quit()
 
@@ -123,7 +125,7 @@ class GameOfGreed:
         """
         return tuple([int(i) for i in valid_selection])
 
-    def validate_answer(self, answer: str) -> str:
+    def validate_answer(self, answer: str, acceptable_options: tuple) -> str:
         """Process user answer and brings it to the consistent format
 
         Args:
@@ -132,16 +134,18 @@ class GameOfGreed:
         Returns:
             str: Processed user answer
         """
-        if answer.lower() == 'yes' or answer.lower() == 'y':
-            answer = 'y'
-        elif answer.lower() == 'no' or answer.lower() == 'n':
-            answer = 'n'
-        elif answer.lower() == 'roll' or answer.lower() == 'r':
-            answer = 'r'
-        elif answer.lower() == 'bank' or answer.lower() == 'b':
-            answer = 'b'
-        elif answer.lower() == 'quit' or answer.lower() == 'q':
-            self.quit()
+        while answer not in acceptable_options:
+            if answer.lower() == 'yes' or answer.lower() == 'y':
+                answer = 'y'
+            elif answer.lower() == 'no' or answer.lower() == 'n':
+                answer = 'n'
+            elif answer.lower() == 'roll' or answer.lower() == 'r':
+                answer = 'r'
+            elif answer.lower() == 'bank' or answer.lower() == 'b':
+                answer = 'b'
+            elif answer.lower() == 'quit' or answer.lower() == 'q':
+                self.quit()
+            answer = input(self.invalid_selection_msg)
 
         return answer
 
