@@ -19,7 +19,7 @@ class GameOfGreed:
         self.wanna_play_msg = 'Wanna play? '
         self.invalid_selection_msg = 'Cheater!!! Or possibly made a typo...'
         self.select_dice_msg = 'Enter dice to keep (no spaces), or (q)uit: '
-        self.zero_point_roll_msg = 'Your current roll is worth 0 points. You\'ve lost all your unbanked points in this round'
+        self.zero_point_roll_msg = 'Zilch!!! Round over'
         self.options_msg = '(r)oll again, (b)ank your points or (q)uit '
 
     def start_game(self) -> None:
@@ -98,6 +98,9 @@ class GameOfGreed:
             self.current_round += 1
 
         self.quit()
+
+    def game_round(self):
+        pass
 
     def validate_selection(self, selection: str, roll: tuple) -> bool:
         """Checks if user wants to proceed with the dice that are present in the given roll
