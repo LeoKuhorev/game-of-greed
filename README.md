@@ -56,4 +56,4 @@ Run `python -m game_of_greed.game` or `PYTHONPATH='.' python game_of_greed/game.
 1.1: _Initialized test GameLogic and Banker classes_ - 18 Jun 2020  
 1.2: _Initialized user prompts and simulate dice rolling_ - 20 Jun 2020
 
-[link to PR:](https://github.com/LeoKuhorev/game-of-greed/pull/6)
+[link to PR:](https://github.com/LeoKuhorev/game-of-greed/pull/16)
