@@ -33,12 +33,12 @@ class GameLogic:
 
         # Scores for single and multiple appearance
         SCORES = {
-            1: {'one': 100, 'mult': 1000},
-            2: {'one': 0, 'mult': 200},
-            3: {'one': 0, 'mult': 300},
-            4: {'one': 0, 'mult': 400},
-            5: {'one': 50, 'mult': 500},
-            6: {'one': 0, 'mult': 600},
+            1: {'single': 100, 'mult': 1000},
+            2: {'single': 0, 'mult': 200},
+            3: {'single': 0, 'mult': 300},
+            4: {'single': 0, 'mult': 400},
+            5: {'single': 50, 'mult': 500},
+            6: {'single': 0, 'mult': 600},
         }
 
         scores = 0  # Final scores
@@ -48,6 +48,7 @@ class GameLogic:
         # If straight or 3 pairs - give 1500 points
         if len(count) == 6 or list(count.values()) == [2, 2, 2]:
             scores = 1500
+            all_dice_scored = True
 
         else:
             # Process 3..6 times appearance
@@ -61,10 +62,16 @@ class GameLogic:
                             dice_roll.remove(pips)
 
             # Process single appearance
-            for dice in dice_roll:
-                scores += SCORES[dice]['one']
+            scored_single_dice = []
 
-        return scores
+            for dice in dice_roll:
+                scores += SCORES[dice]['single']
+                if SCORES[dice]['single'] > 0:
+                    scored_single_dice.append(dice)
+
+            all_dice_scored = scored_single_dice == dice_roll
+
+        return (scores, all_dice_scored)
 
     @staticmethod
     def roll_dice(number_of_dice: int) -> tuple:
