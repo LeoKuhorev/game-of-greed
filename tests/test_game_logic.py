@@ -105,7 +105,7 @@ class TestGameLogic:
             roll (tuple): roll combination
             result (int): points result
         """
-        assert GameLogic.calculate_score(roll) == result
+        assert GameLogic.calculate_score(roll)[0] == result
 
     def test_gl_roll_dice_type_error(self):
         """Test if the method raises TypeError if not an integer passed in"""

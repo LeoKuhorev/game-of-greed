@@ -1,7 +1,6 @@
 from game_of_greed.banker import Banker
 from game_of_greed.game_logic import GameLogic
 
-from collections import Counter
 import sys
 
 
@@ -12,14 +11,14 @@ class GameOfGreed:
         self.NUMBER_OF_ROUNDS = 10
         self.bank = Banker()
         self.current_round = 1
-        self.dice_to_roll = 6
+        self.number_of_dice_to_roll = 6
 
         # Game messages
         self.welcome_msg = 'Welcome to Game of Greed'
         self.wanna_play_msg = 'Wanna play? '
         self.invalid_selection_msg = 'Cheater!!! Or possibly made a typo...'
         self.select_dice_msg = 'Enter dice to keep (no spaces), or (q)uit: '
-        self.zero_point_roll_msg = 'Zilch!!! Round over'
+        self.zilch_msg = 'Zilch!!! Round over'
         self.options_msg = '(r)oll again, (b)ank your points or (q)uit '
 
     def start_game(self) -> None:
@@ -38,63 +37,40 @@ class GameOfGreed:
         while self.current_round <= self.NUMBER_OF_ROUNDS:
             print(
                 f'Starting round {self.current_round}/{self.NUMBER_OF_ROUNDS}')
-            print(f'Rolling {self.dice_to_roll} dice...')
-            current_roll = GameLogic.roll_dice(self.dice_to_roll)
+            print(f'Rolling {self.number_of_dice_to_roll} dice...')
+            current_roll = GameLogic.roll_dice(self.number_of_dice_to_roll)
             print(','.join(str(i) for i in current_roll))
 
             # If current roll is worth 0 - go to the next round
-            if GameLogic.calculate_score(current_roll) == 0:
-                print(self.zero_point_roll_msg)
+            if GameLogic.calculate_score(current_roll)[0] == 0:
+                print(self.zilch_msg)
                 self.bank.clear_shelf()
-                self.dice_to_roll = 6
+                self.number_of_dice_to_roll = 6
                 self.current_round += 1
                 continue
 
-            current_score = 0
-            while current_score == 0:
-                answer = self.validate_answer(
-                    input(self.select_dice_msg), ('1', '2', '3', '4', '5', '6', 'q'))
+            # Handle user dice selection
+            selected_dice, all_dice_scored = self.handle_selection(
+                current_roll)
 
-                # Validate user selection
-                while True:
-                    if self.validate_selection(answer, current_roll):
-                        break
+            self.number_of_dice_to_roll -= len(selected_dice)
+            if self.number_of_dice_to_roll == 0 and all_dice_scored:
+                self.number_of_dice_to_roll = 6
 
-                    print(self.invalid_selection_msg)
-                    print(','.join(str(i) for i in current_roll))
-                    answer = self.validate_answer(
-                        input(self.select_dice_msg), ('1', '2', '3', '4', '5', '6', 'q'))
-
-                # Calculate score for a valid selection
-                current_score = GameLogic.calculate_score(
-                    self.convert_selection(answer))
-
-                # Shelf points
-                self.bank.shelf(current_score)
-
-                # If current selection is worth 0 - ask user to select again
-                if current_score == 0:
-                    selection = ', '.join(str(dice) for dice in answer)
-                    print(
-                        f'Selection of {selection} gives you 0 points, please try again')
-
-            self.dice_to_roll -= len(answer)
             print(
-                f'You have {self.bank.shelf_points} unbanked points and {self.dice_to_roll} dice remaining')
+                f'You have {self.bank.shelf_points} unbanked points and {self.number_of_dice_to_roll} dice remaining')
 
             answer = self.validate_answer(
                 input(self.options_msg), ('r', 'b', 'q'))
-            if answer == 'r':
-                if self.dice_to_roll == 0:
-                    self.dice_to_roll = 6
+            if answer == 'r' and self.number_of_dice_to_roll > 0:
                 continue
             elif answer == 'b':
-                self.dice_to_roll = 6
                 points = self.bank.bank()
                 print(
                     f'You banked {points} points in round {self.current_round}')
                 print(f'Total score is {self.bank.bank_points} points')
 
+            self.number_of_dice_to_roll = 6
             self.current_round += 1
 
         self.quit()
@@ -102,28 +78,43 @@ class GameOfGreed:
     def game_round(self):
         pass
 
-    def validate_selection(self, selection: str, roll: tuple) -> bool:
-        """Checks if user wants to proceed with the dice that are present in the given roll
+    def handle_selection(self, current_roll):
 
-        Args:
-            selection (str): Dice that user decided to score
-            roll (tuple): Current roll
+        while True:
+            # Check if user entry is acceptable (number of dice or quit)
+            acceptable_entries = ('1', '2', '3', '4', '5', '6', 'q')
+            answer = self.validate_answer(
+                input(self.select_dice_msg), acceptable_entries)
 
-        Returns:
-            bool: Whether all dice are present in current roll
-        """
-        return all(str(roll).count(dice) >= selection.count(dice) for dice in selection)
+            # Check if user entry is a valid selection (dice are present in the current roll)
+            while True:
+                is_valid = all(str(current_roll).count(dice) >=
+                               answer.count(dice) for dice in answer)
+                if is_valid:
+                    break
 
-    def convert_selection(self, valid_selection: str) -> tuple:
-        """Converts user selected dice into a tuple of integers
+                print(self.invalid_selection_msg)
+                print(','.join(str(i) for i in current_roll))
+                answer = self.validate_answer(
+                    input(self.select_dice_msg), acceptable_entries)
 
-        Args:
-            valid_selection (str): User dice selection
+            # Calculate score for a valid selection
+            valid_selection = tuple([int(i) for i in answer])
+            current_score, all_dice_scored = GameLogic.calculate_score(
+                valid_selection)
 
-        Returns:
-            tuple: Tuple of integers of the same user selection
-        """
-        return tuple([int(i) for i in valid_selection])
+            # Shelf points
+            self.bank.shelf(current_score)
+
+            # If current selection is scored more than 0 - return, else ask to select again
+            if current_score != 0:
+                break
+
+            selection = ', '.join(str(dice) for dice in answer)
+            print(
+                f'Selection of {selection} gives you 0 points, please try again')
+
+        return (answer, all_dice_scored)
 
     def validate_answer(self, answer: str, acceptable_options: tuple) -> str:
         """Process user answer and brings it to the consistent format
