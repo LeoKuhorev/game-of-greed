@@ -8,7 +8,7 @@ _Authors: Leo Kukharau, Natalie Sinner, Richard Whitehead_
 
 ## Description
 
-This is a Python console application that will simulate a dice game called Game of Greed.
+This is a Python console application that simulates a dice game called Game of Greed. You can read the rules and more about this game [here](https://en.wikipedia.org/wiki/Dice_10000)
 
 ---
 
