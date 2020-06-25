@@ -1,6 +1,6 @@
 Welcome to Game of Greed
-Wanna play?y
-Starting round 1
+Wanna play? y
+Starting round 1/10
 Rolling 6 dice...
 6,5,6,3,2,1
 Enter dice to keep (no spaces), or (q)uit: 1
@@ -26,7 +26,7 @@ Rolling 2 dice...
 Zilch!!! Round over
 You banked 0 points in round 1
 Total score is 0 points
-Starting round 2
+Starting round 2/10
 Rolling 6 dice...
 5,4,6,5,2,3
 Enter dice to keep (no spaces), or (q)uit: q

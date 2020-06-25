@@ -87,6 +87,7 @@ class GameLogic:
         Returns:
             tuple: Random values in range 1 - 6 for each dice passed in
         """
+
         if type(number_of_dice) is not int:
             raise TypeError('The number of dice must be an integer')
 

@@ -11,47 +11,38 @@ class TestGame:
     def game(self):
         return GameOfGreed()
 
-    def mock_roll_dice(self, *args):
-        return (1, 2, 3, 2, 3, 4)
 
     def test_wanna_play(self):
         Flo.test("tests/flo/wanna_play.txt")
 
     def test_do_wanna_play_then_quit(self):
-        old_roll_dice = GameLogic.roll_dice
-        GameLogic.roll_dice = self.mock_roll_dice
-
         Flo.test("tests/flo/do_wanna_play_then_quit.txt")
 
-        GameLogic.roll_dice = old_roll_dice
-
     def test_cheat_and_fix(self):
-        old_roll_dice = GameLogic.roll_dice
-        GameLogic.roll_dice = self.mock_roll_dice
-
         Flo.test("tests/flo/cheat_and_fix.txt")
 
-        GameLogic.roll_dice = old_roll_dice
-
     def test_bank_one_roll_then_quit(self):
-        old_roll_dice = GameLogic.roll_dice
-        GameLogic.roll_dice = self.mock_roll_dice
-
         Flo.test("tests/flo/bank_one_roll_then_quit.txt")
 
-        GameLogic.roll_dice = old_roll_dice
+    def test_bank_first_for_two_rounds(self):
+        Flo.test("tests/flo/bank_first_for_two_rounds.txt")
 
-    def test_bank_with_two_rounds(self):
-        old_roll_dice = GameLogic.roll_dice
-        GameLogic.roll_dice = self.mock_roll_dice
+    def test_hot_dice(self):
+        Flo.test("tests/flo/hot_dice.txt")
 
-        Flo.test("tests/flo/bank_with_two_rounds.txt")
+    def test_living_on_the_edge(self):
+        Flo.test("tests/flo/living_on_the_edge.txt")
 
-        GameLogic.roll_dice = old_roll_dice
+    def test_quitter(self):
+        Flo.test("tests/flo/quitter.txt")
+        
+    def test_zilch(self):
+        Flo.test("tests/flo/zilch.txt")
 
-    def test_example(self, capfd):
-        """Another way to test STOUT
-        """
-        print("hello Tom")
-        out, err = capfd.readouterr()
-        assert out == "hello Tom\n"
+
+    # def test_example(self, capfd):
+    #     """Another way to test STOUT
+    #     """
+    #     print("hello Tom")
+    #     out, err = capfd.readouterr()
+    #     assert out == "hello Tom\n"

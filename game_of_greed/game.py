@@ -12,6 +12,7 @@ class GameOfGreed:
         self.bank = Banker()
         self.current_round = 1
         self.number_of_dice_to_roll = 6
+        self.roll_dice = roll_dice if roll_dice else GameLogic.roll_dice
 
         # Game messages
         self.welcome_msg = 'Welcome to Game of Greed'
@@ -34,19 +35,23 @@ class GameOfGreed:
     def game(self) -> None:
         """Handle game workflow"""
 
+        print(
+            f'Starting round {self.current_round}/{self.NUMBER_OF_ROUNDS}')
         while self.current_round <= self.NUMBER_OF_ROUNDS:
-            print(
-                f'Starting round {self.current_round}/{self.NUMBER_OF_ROUNDS}')
             print(f'Rolling {self.number_of_dice_to_roll} dice...')
-            current_roll = GameLogic.roll_dice(self.number_of_dice_to_roll)
+            current_roll = self.roll_dice(self.number_of_dice_to_roll)
             print(','.join(str(i) for i in current_roll))
 
             # If current roll is worth 0 - go to the next round
             if GameLogic.calculate_score(current_roll)[0] == 0:
                 print(self.zilch_msg)
+                print(f'You banked {self.bank.bank_points} points in round {self.current_round}')
+                print(f'Total score is {self.bank.bank_points} points')
                 self.bank.clear_shelf()
                 self.number_of_dice_to_roll = 6
                 self.current_round += 1
+                print(
+                    f'Starting round {self.current_round}/{self.NUMBER_OF_ROUNDS}')
                 continue
 
             # Handle user dice selection
@@ -54,15 +59,15 @@ class GameOfGreed:
                 current_roll)
 
             self.number_of_dice_to_roll -= len(selected_dice)
-            if self.number_of_dice_to_roll == 0 and all_dice_scored:
-                self.number_of_dice_to_roll = 6
 
             print(
                 f'You have {self.bank.shelf_points} unbanked points and {self.number_of_dice_to_roll} dice remaining')
 
             answer = self.validate_answer(
                 input(self.options_msg), ('r', 'b', 'q'))
-            if answer == 'r' and self.number_of_dice_to_roll > 0:
+            if answer == 'r':
+                if self.number_of_dice_to_roll == 0 and all_dice_scored:
+                    self.number_of_dice_to_roll = 6 
                 continue
             elif answer == 'b':
                 points = self.bank.bank()
@@ -72,6 +77,8 @@ class GameOfGreed:
 
             self.number_of_dice_to_roll = 6
             self.current_round += 1
+            print(
+            f'Starting round {self.current_round}/{self.NUMBER_OF_ROUNDS}')
 
         self.quit()
 

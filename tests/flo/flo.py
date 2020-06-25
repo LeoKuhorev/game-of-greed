@@ -34,7 +34,7 @@ class Flo:
                 # gather rolls
                 if line[0].isdigit():
 
-                    roll = [int(item) for item in line.split(",")]
+                    roll = tuple([int(item) for item in line.split(",")])
 
                     self.old_print("roll" + str(roll))
 
