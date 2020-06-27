@@ -45,7 +45,8 @@ class GameOfGreed:
             # If current roll is worth 0 - go to the next round
             if GameLogic.calculate_score(current_roll)[0] == 0:
                 print(self.zilch_msg)
-                print(f'You banked {self.bank.bank_points} points in round {self.current_round}')
+                print(
+                    f'You banked {self.bank.bank_points} points in round {self.current_round}')
                 print(f'Total score is {self.bank.bank_points} points')
                 self.bank.clear_shelf()
                 self.number_of_dice_to_roll = 6
@@ -67,7 +68,7 @@ class GameOfGreed:
                 input(self.options_msg), ('r', 'b', 'q'))
             if answer == 'r':
                 if self.number_of_dice_to_roll == 0 and all_dice_scored:
-                    self.number_of_dice_to_roll = 6 
+                    self.number_of_dice_to_roll = 6
                 continue
             elif answer == 'b':
                 points = self.bank.bank()
@@ -78,12 +79,9 @@ class GameOfGreed:
             self.number_of_dice_to_roll = 6
             self.current_round += 1
             print(
-            f'Starting round {self.current_round}/{self.NUMBER_OF_ROUNDS}')
+                f'Starting round {self.current_round}/{self.NUMBER_OF_ROUNDS}')
 
         self.quit()
-
-    def game_round(self):
-        pass
 
     def handle_selection(self, current_roll):
 
@@ -107,7 +105,7 @@ class GameOfGreed:
 
             # Calculate score for a valid selection
             valid_selection = tuple([int(i) for i in answer])
-            current_score, all_dice_scored = GameLogic.calculate_score(
+            current_score, all_dice_scored, _ = GameLogic.calculate_score(
                 valid_selection)
 
             # Shelf points

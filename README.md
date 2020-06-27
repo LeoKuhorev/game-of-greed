@@ -8,7 +8,7 @@ _Authors: Leo Kukharau, Natalie Sinner, Richard Whitehead_
 
 ## Description
 
-This is a Python console application that will simulate a dice game called Game of Greed.
+This is a Python console application that simulates a dice game called Game of Greed. You can read the rules and more about this game [here](https://en.wikipedia.org/wiki/Dice_10000)
 
 ---
 
@@ -57,4 +57,4 @@ Run `python -m game_of_greed.game` or `PYTHONPATH='.' python game_of_greed/game.
 1.2: _Initialized user prompts and simulate dice rolling_ - 20 Jun 2020
 1.3: _Initialized flo tests and methods_ - 24 Jun 2020
 
-[link to PR:](https://github.com/LeoKuhorev/game-of-greed/pull/20)
+[link to PR:](https://github.com/LeoKuhorev/game-of-greed/pull/21)
