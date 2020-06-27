@@ -48,7 +48,7 @@ class BasePlayer:
             player.reset()
 
         print(
-            f"{__class__.__name__} {num_games} games (maybe) played with average score of {mega_total // num_games}"
+            f"{cls.__name__}: {num_games} games played with average score of {mega_total // num_games} ({game.NUMBER_OF_ROUNDS} rounds per game)"
         )
 
 
@@ -94,7 +94,7 @@ class PlayerBot(NervousNellie):
             self.total_score = int(re.findall(r"\d+", first_arg)[0])
         elif first_arg.startswith("You have"):
             self.current_points = int(re.findall(r"\d+", first_arg)[0])
-        
+
     def _mock_input(self, *args, **kwargs):
         prompt = args[0]
         if prompt.startswith("Wanna play?"):
@@ -107,7 +107,7 @@ class PlayerBot(NervousNellie):
             self.remaining_dice = len(self.roll) - len(self.scorers)
             if self.remaining_dice == 0:
                 self.remaining_dice = 6
-            if self.current_points < 500: 
+            if self.current_points < 500:
                 if self.remaining_dice > 1:
                     return "r"
                 else:
@@ -122,7 +122,7 @@ class PlayerBot(NervousNellie):
             else:
                 if self.remaining_dice > 3:
                     return "r"
-            
+
                 else:
                     self.current_points = 0
                     return "b"
