@@ -48,7 +48,7 @@ class BasePlayer:
             player.reset()
 
         print(
-            f"{num_games} games (maybe) played with average score of {mega_total // num_games}"
+            f"{__class__.__name__} {num_games} games (maybe) played with average score of {mega_total // num_games}"
         )
 
 
@@ -84,17 +84,48 @@ class NervousNellie(BasePlayer):
             raise ValueError(f"Unrecognized prompt {prompt}")
 
 
-class PlayerBor(NervousNellie):
+class PlayerBot(NervousNellie):
+    def _mock_print(self, *args, **kwargs):
+        first_arg = args[0]
+        first_char = first_arg[0]
+        if first_char.isdigit():
+            self.roll = tuple(int(char) for char in first_arg.split(","))
+        elif first_arg.startswith("Thanks for playing."):
+            self.total_score = int(re.findall(r"\d+", first_arg)[0])
+        elif first_arg.startswith("You have"):
+            self.current_points = int(re.findall(r"\d+", first_arg)[0])
+        
     def _mock_input(self, *args, **kwargs):
         prompt = args[0]
         if prompt.startswith("Wanna play?"):
             return "y"
         elif prompt.startswith("Enter dice to keep (no spaces), or (q)uit:"):
-            scorers = GameLogic.get_scorers(self.roll)
-            keepers = "".join([str(ch) for ch in scorers])
+            self.scorers = GameLogic.get_scorers(self.roll)
+            keepers = "".join([str(ch) for ch in self.scorers])
             return keepers
         elif prompt.startswith("(r)oll again, (b)ank your points or (q)uit "):
-            return "b"
+            self.remaining_dice = len(self.roll) - len(self.scorers)
+            if self.remaining_dice == 0:
+                self.remaining_dice = 6
+            if self.current_points < 500: 
+                if self.remaining_dice > 1:
+                    return "r"
+                else:
+                    self.current_points = 0
+                    return "b"
+            elif self.current_points < 1000:
+                if self.remaining_dice > 2:
+                    return "r"
+                else:
+                    self.current_points = 0
+                    return "b"
+            else:
+                if self.remaining_dice > 3:
+                    return "r"
+            
+                else:
+                    self.current_points = 0
+                    return "b"
         else:
             raise ValueError(f"Unrecognized prompt {prompt}")
 
@@ -102,4 +133,4 @@ class PlayerBor(NervousNellie):
 if __name__ == "__main__":
     # Naysayer.play(100)
     NervousNellie.play(1000)
-    PlayerBor.play(1000)
+    PlayerBot.play(1000)

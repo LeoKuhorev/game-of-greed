@@ -49,6 +49,7 @@ class GameLogic:
         if len(count) == 6 or list(count.values()) == [2, 2, 2]:
             scores = 1500
             all_dice_scored = True
+            dice_roll = []
 
         else:
             # Process 3..6 times appearance
