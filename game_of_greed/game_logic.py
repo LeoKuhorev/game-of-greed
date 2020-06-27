@@ -70,8 +70,11 @@ class GameLogic:
                     scored_single_dice.append(dice)
 
             all_dice_scored = scored_single_dice == dice_roll
+            for dice in scored_single_dice:
+                while dice in dice_roll:
+                    dice_roll.remove(dice)
 
-        return (scores, all_dice_scored)
+        return (scores, all_dice_scored, dice_roll)
 
     @staticmethod
     def roll_dice(number_of_dice: int) -> tuple:
@@ -95,3 +98,10 @@ class GameLogic:
             raise ValueError('The number of dice must be between 1 and 6')
 
         return tuple(random.randint(1, 6) for _ in range(number_of_dice))
+
+    @staticmethod
+    def get_scorers(roll):
+        non_scoring_dice = GameLogic.calculate_score(roll)[2]
+        selected_dice = tuple(
+            dice for dice in roll if dice not in non_scoring_dice)
+        return selected_dice if len(selected_dice) > 0 else roll
