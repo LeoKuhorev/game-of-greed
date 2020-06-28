@@ -63,4 +63,4 @@ Run a bot: `python -m game_of_greed.player_bot` or `PYTHONPATH='.' python game_o
 1.3: _Initialized flo tests and methods_ - 24 Jun 2020
 1.4: _AI Bot added_ - 27 Jun 2020
 
-[link to PR:](https://github.com/LeoKuhorev/game-of-greed/pull/21)
+[link to PR:](https://github.com/LeoKuhorev/game-of-greed/pull/23)
