@@ -50,7 +50,7 @@ class BasePlayer:
             player.reset()
 
         print(
-            f"{cls.__name__}: {num_games} games played with average score of {mega_total // num_games} ({game.NUMBER_OF_ROUNDS} rounds per game)"
+            f"{cls.__name__}: {num_games} games played with average score of {mega_total // (num_games * game.NUMBER_OF_ROUNDS)} per game"
         )
 
 
@@ -122,8 +122,12 @@ class PlayerBot(BasePlayer):
         elif prompt.startswith("Enter dice to keep (no spaces), or (q)uit:"):
             self.scorers = GameLogic.get_scorers(self.roll)
 
+            all_dice_scored = GameLogic.calculate_score(self.roll)[1]
+            if all_dice_scored:
+                self.scorers = self.roll
+
             # If the entire roll (5 or 6 dice) is scored under 300 points, select only 1 dice
-            if GameLogic.calculate_score(self.scorers)[0] < 300 and len(self.roll) > 4:
+            elif GameLogic.calculate_score(self.scorers)[0] < 300 and len(self.roll) > 4:
                 if 1 in self.scorers:
                     self.scorers = (1, )
                 elif 5 in self.scorers:
@@ -142,7 +146,7 @@ class PlayerBot(BasePlayer):
             combinations = (
                 {'dice_left': 1, 'min_points': 250},
                 {'dice_left': 2, 'min_points': 300},
-                {'dice_left': 3, 'min_points': 350},
+                {'dice_left': 3, 'min_points': 400},
                 {'dice_left': 4, 'min_points': 700},
                 {'dice_left': 5, 'min_points': 1500},
             )
@@ -160,5 +164,5 @@ class PlayerBot(BasePlayer):
 
 
 if __name__ == "__main__":
-    NervousNellie.play(2000)
-    PlayerBot.play(2000)
+    NervousNellie.play(10000)
+    PlayerBot.play(10000)
