@@ -150,9 +150,7 @@ class PlayerBot(BasePlayer):
             # Keep rolling if the points are below the minimum for a particular number of dice left
             for combination in combinations:
                 if self.remaining_dice == combination['dice_left']:
-                    if self.current_points <= combination['min_points']:
-                        return 'r'
-                    else:
+                    if self.current_points > combination['min_points']:
                         self.current_points = 0
                         return 'b'
             return 'r'
@@ -162,5 +160,5 @@ class PlayerBot(BasePlayer):
 
 
 if __name__ == "__main__":
-    NervousNellie.play(1000)
-    PlayerBot.play(5000)
+    NervousNellie.play(2000)
+    PlayerBot.play(2000)
