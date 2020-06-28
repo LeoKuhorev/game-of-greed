@@ -139,33 +139,28 @@ class PlayerBot(BasePlayer):
             if self.remaining_dice == 0:
                 self.remaining_dice = 6
 
-            # Keep rolling 1 or more dice until you have at least 250 points
-            if self.current_points < 250:
-                if self.remaining_dice >= 1:
-                    return "r"
-                else:
-                    self.current_points = 0
-                    return "b"
+            combinations = (
+                {'dice_left': 1, 'min_points': 250},
+                {'dice_left': 2, 'min_points': 300},
+                {'dice_left': 3, 'min_points': 350},
+                {'dice_left': 4, 'min_points': 700},
+                {'dice_left': 5, 'min_points': 1500},
+            )
 
-            # Don't roll less than 3 dice if the unbanked points are 500..700
-            elif self.current_points < 350:
-                if self.remaining_dice >= 2:
-                    return "r"
-                else:
-                    self.current_points = 0
-                    return "b"
+            # Keep rolling if the points are below the minimum for a particular number of dice left
+            for combination in combinations:
+                if self.remaining_dice == combination['dice_left']:
+                    if self.current_points <= combination['min_points']:
+                        return 'r'
+                    else:
+                        self.current_points = 0
+                        return 'b'
+            return 'r'
 
-            # If over 700 unbanked points - don't risk and bank when less than 4 dice left
-            else:
-                if self.remaining_dice >= 4:
-                    return "r"
-                else:
-                    self.current_points = 0
-                    return "b"
         else:
             raise ValueError(f"Unrecognized prompt {prompt}")
 
 
 if __name__ == "__main__":
     NervousNellie.play(1000)
-    PlayerBot.play(1000)
+    PlayerBot.play(5000)
