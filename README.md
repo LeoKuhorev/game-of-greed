@@ -28,7 +28,8 @@ Next navigate to the location you cloned the Repository.
 
 Navigate to the `game_of_greed` directory.
 
-Run `python -m game_of_greed.game` or `PYTHONPATH='.' python game_of_greed/game.py`
+Run: `python -m game_of_greed.game` or `PYTHONPATH='.' python game_of_greed/game.py`
+Run a bot: `python -m game_of_greed.player_bot` or `PYTHONPATH='.' python game_of_greed/player_bot.py`
 
 ---
 
@@ -42,11 +43,15 @@ Run `python -m game_of_greed.game` or `PYTHONPATH='.' python game_of_greed/game.
 
 #### Application Start
 
-![Game of Greed lab 2](assests/start.png)
+![Application Start](assests/start.png)
 
 #### Using the Application
 
-![Image 1](assests/playing_game.png)
+![Using the Application](assests/playing_game.png)
+
+#### Running AI bot
+
+![AI Bot results](assests/bot_results.png)
 
 ---
 
@@ -56,5 +61,6 @@ Run `python -m game_of_greed.game` or `PYTHONPATH='.' python game_of_greed/game.
 1.1: _Initialized test GameLogic and Banker classes_ - 18 Jun 2020  
 1.2: _Initialized user prompts and simulate dice rolling_ - 20 Jun 2020
 1.3: _Initialized flo tests and methods_ - 24 Jun 2020
+1.4: _AI Bot added_ - 27 Jun 2020
 
-[link to PR:](https://github.com/LeoKuhorev/game-of-greed/pull/21)
+[link to PR:](https://github.com/LeoKuhorev/game-of-greed/pull/23)
